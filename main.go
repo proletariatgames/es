@@ -1,10 +1,10 @@
 package main
 
 import (
-	"flag"
-	"fmt"
 	"bufio"
 	"encoding/json"
+	"flag"
+	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -110,6 +110,8 @@ var commands = []*Command{
 	cmdDeleteSnapshot,
 	cmdRestoreSnapshot,
 	cmdSnapshotStatus,
+
+	cmdCreateMigration,
 
 	cmdVersion,
 	cmdApi,
