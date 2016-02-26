@@ -113,6 +113,7 @@ var commands = []*Command{
 
 	cmdCreateMigration,
 	cmdMigrateStatus,
+	cmdMigrateUp,
 
 	cmdVersion,
 	cmdApi,
