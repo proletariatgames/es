@@ -112,6 +112,7 @@ var commands = []*Command{
 	cmdSnapshotStatus,
 
 	cmdCreateMigration,
+	cmdMigrateStatus,
 
 	cmdVersion,
 	cmdApi,
