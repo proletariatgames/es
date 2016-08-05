@@ -130,8 +130,20 @@ func esClient() *elastic.Client {
 	return client
 }
 
+func logJson(data interface{}, err error) {
+	var bytes []byte
+	if err == nil {
+		bytes, err = json.Marshal(data)
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Print(string(bytes))
+}
+
 func main() {
 	log.SetFlags(0)
+	log.SetOutput(os.Stdout)
 
 	args := os.Args[1:]
 	if len(args) < 1 {

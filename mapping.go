@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"os"
 )
 
@@ -26,13 +24,5 @@ func runMapping(cmd *Command, args []string) {
 		os.Exit(1)
 	}
 
-	index := args[0]
-
-	var mapping map[string]interface{}
-	body := ESReq("GET", "/"+index+"/_mapping?pretty=1").Do(&mapping)
-	if error, ok := mapping["error"]; ok {
-		status, _ := mapping["status"]
-		log.Fatalf("Error: %v (%v)\n", error, status)
-	}
-	fmt.Print(body)
+	logJson(esClient().GetMapping().Index(args[0]).Do())
 }
