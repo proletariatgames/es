@@ -1,9 +1,5 @@
 package main
 
-import (
-	"log"
-)
-
 var cmdFlush = &Command{
 	Run:   runFlush,
 	Usage: "flush [index]",
@@ -27,19 +23,10 @@ func runFlush(cmd *Command, args []string) {
 		index = args[0]
 	}
 
-	var response struct {
-		Ok     bool   `json:"ok,omitempty"`
-		Error  string `json:"error,omitempty"`
-		Status int    `json:"status,omitempty"`
-	}
-
+	f := esClient().Flush()
 	if len(index) > 0 {
-		ESReq("POST", "/"+index+"/_flush").Do(&response)
-	} else {
-		ESReq("POST", "/_flush").Do(&response)
+		f = f.Index(index)
 	}
 
-	if len(response.Error) > 0 {
-		log.Fatalf("Error: %v (%v)\n", response.Error, response.Status)
-	}
+	logJson(f.Do())
 }
