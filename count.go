@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"net/url"
 	"os"
 )
 
@@ -27,13 +25,5 @@ func runCount(cmd *Command, args []string) {
 		os.Exit(1)
 	}
 
-	indices := args[0]
-
-	values := url.Values{}
-	values.Set("pretty", "true")
-
-	var response map[string]interface{}
-
-	body := ESReq("GET", "/"+indices+"/_count?"+values.Encode()).Do(&response)
-	fmt.Print(body)
+	logJson(esClient().Count(args[0]).Do())
 }
