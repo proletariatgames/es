@@ -1,18 +1,19 @@
 package main
 
 import (
-	"flag"
-	"fmt"
 	"bufio"
 	"encoding/json"
+	"flag"
+	"fmt"
 	"log"
 	"os"
 	"strings"
+
+	"gopkg.in/olivere/elastic.v3"
 )
 
 const (
-	Version    = "0.1.2"
-	DefaultUrl = "http://localhost:9200"
+	Version = "0.2.0"
 )
 
 var (
@@ -117,8 +118,17 @@ var commands = []*Command{
 }
 
 var (
-	esUrl string
+	esUrl   string
+	esSniff bool
 )
+
+func esClient() *elastic.Client {
+	client, err := elastic.NewClient(elastic.SetSniff(esSniff), elastic.SetURL(esUrl))
+	if err != nil {
+		log.Fatal(err)
+	}
+	return client
+}
 
 func main() {
 	log.SetFlags(0)
@@ -128,9 +138,13 @@ func main() {
 		usage()
 	}
 
-	esUrl = DefaultUrl
+	esUrl = elastic.DefaultURL
+	esSniff = elastic.DefaultSnifferEnabled
 	if s := os.Getenv("ES_URL"); s != "" {
 		esUrl = strings.TrimRight(s, "/")
+	}
+	if s := os.Getenv("ES_SNIFF"); s != "" {
+		esSniff = s == "true"
 	}
 
 	for _, cmd := range commands {

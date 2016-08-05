@@ -5,8 +5,6 @@ import (
 	"log"
 	"regexp"
 	"sort"
-
-	"github.com/olivere/elastic"
 )
 
 var cmdIndices = &Command{
@@ -37,12 +35,7 @@ func runIndices(cmd *Command, args []string) {
 		pattern = args[0]
 	}
 
-	// Get a client
-	client, err := elastic.NewClient(elastic.SetURL(esUrl))
-	if err != nil {
-		log.Fatal(err)
-	}
-	indices, err := client.IndexNames()
+	indices, err := esClient().IndexNames()
 	if err != nil {
 		log.Fatal(err)
 	}

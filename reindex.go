@@ -6,7 +6,7 @@ import (
 	_ "net/http/httputil"
 	"os"
 
-	"github.com/olivere/elastic"
+	"gopkg.in/olivere/elastic.v3"
 )
 
 var cmdReindex = &Command{
