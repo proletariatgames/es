@@ -1,9 +1,5 @@
 package main
 
-import (
-	"log"
-)
-
 var cmdRefresh = &Command{
 	Run:   runRefresh,
 	Usage: "refresh [index]",
@@ -27,19 +23,5 @@ func runRefresh(cmd *Command, args []string) {
 		index = args[0]
 	}
 
-	var response struct {
-		Ok     bool   `json:"ok,omitempty"`
-		Error  string `json:"error,omitempty"`
-		Status int    `json:"status,omitempty"`
-	}
-
-	if len(index) > 0 {
-		ESReq("POST", "/"+index+"/_refresh").Do(&response)
-	} else {
-		ESReq("POST", "/_refresh").Do(&response)
-	}
-
-	if len(response.Error) > 0 {
-		log.Fatalf("Error: %v (%v)\n", response.Error, response.Status)
-	}
+	logJson(esClient().Refresh(index).Do())
 }
