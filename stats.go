@@ -1,10 +1,5 @@
 package main
 
-import (
-	"fmt"
-	"log"
-)
-
 var cmdStats = &Command{
 	Run:   runStats,
 	Usage: "stats [index]",
@@ -27,18 +22,5 @@ func runStats(cmd *Command, args []string) {
 		index = args[0]
 	}
 
-	var response map[string]interface{}
-
-	var body string
-	if len(index) > 0 {
-		body = ESReq("GET", "/"+index+"/_stats?pretty=1").Do(&response)
-	} else {
-		body = ESReq("GET", "/_stats?pretty=1").Do(&response)
-	}
-
-	if error, ok := response["error"]; ok {
-		status, _ := response["status"]
-		log.Fatalf("Error: %v (%v)\n", error, status)
-	}
-	fmt.Print(body)
+	logJson(esClient().IndexStats(index).Do())
 }
